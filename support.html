@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartTax · Support Services</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    :root {
+      --primary: #0f2b3c;
+      --primary-dark: #0a1e2a;
+      --secondary: #2d7a6e;
+      --gray-200: #e2e8f0;
+      --gray-600: #475569;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .logo h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 3rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 4rem;
+    }
+
+    .page-header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      color: #e2e8f0;
+    }
+
+    .content {
+      padding: 4rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2rem;
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Plans Container */
+    .plans-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Plan Card */
+    .plan-card {
+      background: white;
+      border: 2px solid var(--gray-200);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    /* Plan Header - Clickable */
+    .plan-header {
+      padding: 2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+    }
+
+    .plan-header:hover {
+      background: #f8fafc;
+    }
+
+    .plan-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex: 1;
+    }
+
+    .plan-icon {
+      font-size: 2.5rem;
+      width: 60px;
+      height: 60px;
+      background: #f1f5f9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .plan-info h3 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-info p {
+      color: var(--gray-600);
+    }
+
+    .plan-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-right: 2rem;
+    }
+
+    .dropdown-icon {
+      font-size: 1.5rem;
+      color: var(--secondary);
+      transition: transform 0.3s;
+    }
+
+    /* Dropdown Form - Hidden by default */
+    .plan-form {
+      display: none;
+      padding: 2rem;
+      background: #f8fafc;
+      border-top: 2px solid var(--gray-200);
+    }
+
+    /* Show form when card is active */
+    .plan-card.active .plan-form {
+      display: block;
+    }
+
+    /* Rotate icon when active */
+    .plan-card.active .dropdown-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Simplified Form - Only 4 items */
+    .simple-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--secondary);
+      outline: none;
+    }
+
+    .submit-btn {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .submit-btn:hover {
+      background: var(--primary);
+    }
+
+    .success-message {
+      background: #10b981;
+      color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .footer {
+      background: var(--primary-dark);
+      color: white;
+      padding: 3rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="logo">
+        <h1>SmartTax</h1>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="filing.html">Filing</a>
+        <a href="consulting.html">Consulting</a>
+        <a href="support.html">Support</a>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <a href="index.html" class="back-link">← Back to Home</a>
+      <h1>Support Services</h1>
+      <p>Click on any plan below to get expert assistance</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <div class="plans-container">
+        <!-- Plan 1: Notice Reply -->
+        <div class="plan-card" id="plan1">
+          <div class="plan-header" onclick="togglePlan('plan1')">
+            <div class="plan-header-left">
+              <div class="plan-icon">📢</div>
+              <div class="plan-info">
+                <h3>Income Tax OR GST Notices handling  </h3>
+                <p>Expert handling of all tax notices (scrutiny, intimation, assessment)</p>
+              </div>
+            </div>
+            <div class="plan-price">Fees at 1% of demand value or min 699 </div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- Notice Reply Form - 4 fields only -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="noticeForm" onsubmit="submitForm(event, 'notice')">
+                <div class="form-group">
+                  <label>1. Full Name *</label>
+                  <input type="text" id="noticeName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="noticeEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="noticePhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Demand Value *</label>
+                  <select id="noticeDemand" required>
+                    <option value="">Select demand value</option>
+                    <option value="upto1">Up to ₹1 lakh</option>
+                    <option value="1to5">₹1 lakh - ₹5 lakhs</option>
+                    <option value="more5">More than ₹5 lakhs</option>
+                  </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Submit Request</button>
+                <div id="successNotice" class="success-message hide">
+                  ✓ Request submitted! Our expert will contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan 2: TDS/AIS Correction -->
+        <div class="plan-card" id="plan2">
+          <div class="plan-header" onclick="togglePlan('plan2')">
+            <div class="plan-header-left">
+              <div class="plan-icon">🔄</div>
+              <div class="plan-info">
+                <h3>TDS/AIS Correction</h3>
+                <p>Fix TDS mismatches, AIS/TIS discrepancies</p>
+              </div>
+            </div>
+            <div class="plan-price">₹499</div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- TDS Correction Form - 4 fields only -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="tdsForm" onsubmit="submitForm(event, 'tds')">
+                <div class="form-group">
+                  <label>1. Full Name *</label>
+                  <input type="text" id="tdsName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="tdsEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="tdsPhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Description *</label>
+                  <input type="text" id="tdsName" placeholder="Description" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">Submit Request</button>
+                <div id="successTds" class="success-message hide">
+                  ✓ Request submitted! Our expert will contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan 3: Annual Support Plan -->
+        <div class="plan-card" id="plan3">
+          <div class="plan-header" onclick="togglePlan('plan3')">
+            <div class="plan-header-left">
+              <div class="plan-icon">🌟</div>
+              <div class="plan-info">
+                <h3>Annual Support Plan</h3>
+                <p>Unlimited queries + 1 free ITR filing + priority support</p>
+              </div>
+            </div>
+            <div class="plan-price">₹4,999</div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- Annual Support Form - 4 fields only -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="annualForm" onsubmit="submitForm(event, 'annual')">
+                <div class="form-group">
+                  <label>1. Full Name *</label>
+                  <input type="text" id="annualName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="annualEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="annualPhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Demand Value *</label>
+                  <select id="annualDemand" required>
+                    <option value="">Select demand value</option>
+                    <option value="upto1">Up to ₹1 lakh</option>
+                    <option value="1to5">₹1 lakh - ₹5 lakhs</option>
+                    <option value="more5">More than ₹5 lakhs</option>
+                  </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Subscribe Now</button>
+                <div id="successAnnual" class="success-message hide">
+                  ✓ Subscription confirmed! We'll contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan 4: Portal Assistance -->
+        <div class="plan-card" id="plan4">
+          <div class="plan-header" onclick="togglePlan('plan4')">
+            <div class="plan-header-left">
+              <div class="plan-icon">🔧</div>
+              <div class="plan-info">
+                <h3>Portal Assistance</h3>
+                <p>E-verification, ITR V processing, password reset</p>
+              </div>
+            </div>
+            <div class="plan-price">₹299</div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- Portal Assistance Form - 4 fields only -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="portalForm" onsubmit="submitForm(event, 'portal')">
+                <div class="form-group">
+                  <label>1. Full Name *</label>
+                  <input type="text" id="portalName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="portalEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="portalPhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Demand Value *</label>
+                  <select id="portalDemand" required>
+                    <option value="">Select demand value</option>
+                    <option value="upto1">Up to ₹1 lakh</option>
+                    <option value="1to5">₹1 lakh - ₹5 lakhs</option>
+                    <option value="more5">More than ₹5 lakhs</option>
+                  </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Get Assistance</button>
+                <div id="successPortal" class="success-message hide">
+                  ✓ Request submitted! Our team will contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan 5: Tax Audit Support -->
+        <div class="plan-card" id="plan5">
+          <div class="plan-header" onclick="togglePlan('plan5')">
+            <div class="plan-header-left">
+              <div class="plan-icon">📊</div>
+              <div class="plan-info">
+                <h3>Tax Audit Support</h3>
+                <p>Section 44AB audit assistance and form 3CA/3CD</p>
+              </div>
+            </div>
+            <div class="plan-price">₹2,499</div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- Tax Audit Form - 4 fields only -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="auditForm" onsubmit="submitForm(event, 'audit')">
+                <div class="form-group">
+                  <label>1. Full Name *</label>
+                  <input type="text" id="auditName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="auditEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="auditPhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Demand Value *</label>
+                  <select id="auditDemand" required>
+                    <option value="">Select demand value</option>
+                    <option value="upto1">Up to ₹1 lakh</option>
+                    <option value="1to5">₹1 lakh - ₹5 lakhs</option>
+                    <option value="more5">More than ₹5 lakhs</option>
+                  </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Get Support</button>
+                <div id="successAudit" class="success-message hide">
+                  ✓ Request submitted! Our audit expert will contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      © 2025 SmartTax. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    // Toggle dropdown function
+    function togglePlan(planId) {
+      const planCard = document.getElementById(planId);
+      
+      // Check if this card is already active
+      const isActive = planCard.classList.contains('active');
+      
+      // First, remove active class from all cards
+      const allPlans = document.querySelectorAll('.plan-card');
+      allPlans.forEach(plan => {
+        plan.classList.remove('active');
+      });
+      
+      // If it wasn't active, make it active
+      if (!isActive) {
+        planCard.classList.add('active');
+      }
+    }
+
+    // Form submission function
+    function submitForm(event, planType) {
+      event.preventDefault();
+      
+      // Get form data based on plan type
+      let formData = {};
+      let successId = '';
+      
+      if (planType === 'notice') {
+        formData = {
+          name: document.getElementById('noticeName').value,
+          email: document.getElementById('noticeEmail').value,
+          phone: document.getElementById('noticePhone').value,
+          demand: document.getElementById('noticeDemand').value,
+          plan: 'Notice Reply'
+        };
+        successId = 'successNotice';
+        
+      } else if (planType === 'tds') {
+        formData = {
+          name: document.getElementById('tdsName').value,
+          email: document.getElementById('tdsEmail').value,
+          phone: document.getElementById('tdsPhone').value,
+          demand: document.getElementById('tdsDemand').value,
+          plan: 'TDS/AIS Correction'
+        };
+        successId = 'successTds';
+        
+      } else if (planType === 'annual') {
+        formData = {
+          name: document.getElementById('annualName').value,
+          email: document.getElementById('annualEmail').value,
+          phone: document.getElementById('annualPhone').value,
+          demand: document.getElementById('annualDemand').value,
+          plan: 'Annual Support Plan'
+        };
+        successId = 'successAnnual';
+        
+      } else if (planType === 'portal') {
+        formData = {
+          name: document.getElementById('portalName').value,
+          email: document.getElementById('portalEmail').value,
+          phone: document.getElementById('portalPhone').value,
+          demand: document.getElementById('portalDemand').value,
+          plan: 'Portal Assistance'
+        };
+        successId = 'successPortal';
+        
+      } else if (planType === 'audit') {
+        formData = {
+          name: document.getElementById('auditName').value,
+          email: document.getElementById('auditEmail').value,
+          phone: document.getElementById('auditPhone').value,
+          demand: document.getElementById('auditDemand').value,
+          plan: 'Tax Audit Support'
+        };
+        successId = 'successAudit';
+      }
+      
+      // Add timestamp
+      formData.timestamp = new Date().toLocaleString();
+      
+      console.log('Support request submitted:', formData);
+      
+      // Show success message
+      document.getElementById(successId).classList.remove('hide');
+      
+      // Hide success message after 3 seconds and reset form
+      setTimeout(() => {
+        document.getElementById(successId).classList.add('hide');
+        
+        // Reset the specific form
+        if (planType === 'notice') {
+          document.getElementById('noticeForm').reset();
+        } else if (planType === 'tds') {
+          document.getElementById('tdsForm').reset();
+        } else if (planType === 'annual') {
+          document.getElementById('annualForm').reset();
+        } else if (planType === 'portal') {
+          document.getElementById('portalForm').reset();
+        } else if (planType === 'audit') {
+          document.getElementById('auditForm').reset();
+        }
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

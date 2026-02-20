@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartTax · ITR Filing</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #f8fafc;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    :root {
+      --primary: #0f2b3c;
+      --primary-dark: #0a1e2a;
+      --secondary: #2d7a6e;
+      --gray-200: #e2e8f0;
+      --gray-600: #475569;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .logo h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 3rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 4rem;
+    }
+
+    .page-header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      color: #e2e8f0;
+    }
+
+    .content {
+      padding: 4rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2rem;
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Plans Container */
+    .plans-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Plan Card */
+    .plan-card {
+      background: white;
+      border: 2px solid var(--gray-200);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    /* Plan Header - Clickable */
+    .plan-header {
+      padding: 2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+    }
+
+    .plan-header:hover {
+      background: #f8fafc;
+    }
+
+    .plan-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex: 1;
+    }
+
+    .plan-icon {
+      font-size: 2.5rem;
+      width: 60px;
+      height: 60px;
+      background: #f1f5f9;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .plan-info h3 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-info p {
+      color: var(--gray-600);
+    }
+
+    .plan-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-right: 2rem;
+    }
+
+    .dropdown-icon {
+      font-size: 1.5rem;
+      color: var(--secondary);
+      transition: transform 0.3s;
+    }
+
+    /* Dropdown Form - Hidden by default */
+    .plan-form {
+      display: none;
+      padding: 2rem;
+      background: #f8fafc;
+      border-top: 2px solid var(--gray-200);
+    }
+
+    /* Show form when card is active */
+    .plan-card.active .plan-form {
+      display: block;
+    }
+
+    /* Rotate icon when active */
+    .plan-card.active .dropdown-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Simplified Form - Only 4 items */
+    .simple-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--secondary);
+      outline: none;
+    }
+
+    .submit-btn {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .submit-btn:hover {
+      background: var(--primary);
+    }
+
+    .success-message {
+      background: #10b981;
+      color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .footer {
+      background: var(--primary-dark);
+      color: white;
+      padding: 3rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="logo">
+        <h1>SmartTax</h1>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="filing.html">Filing</a>
+        <a href="consulting.html">Consulting</a>
+        <a href="support.html">Support</a>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <a href="index.html" class="back-link">← Back to Home</a>
+      <h1>ITR Filing</h1>
+      <p>Click on any plan below to fill the application form</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <div class="plans-container">
+        <!-- Plan 1: Salaried -->
+        <div class="plan-card" id="plan1">
+          <div class="plan-header" onclick="togglePlan('plan1')">
+            <div class="plan-header-left">
+              <div class="plan-icon">👔</div>
+              <div class="plan-info">
+                <h3>Total Income upto 25 lakhs </h3>
+                <p>For individuals with salary income, house property, other income</p>
+              </div>
+            </div>
+            <div class="plan-price">Fees at 0.05% of Total Income </div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- Salaried Form -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="salariedForm" onsubmit="submitForm(event, 'salaried')">
+                <div class="form-group">
+                  <label>1. Full Name *</label>
+                  <input type="text" id="salariedName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="salariedEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="salariedPhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Income Range *</label>
+                  <select id="salariedIncome" required>
+                    <option value="">Select your income range</option>
+                    <option value="<12">Less than ₹12 lakhs</option>
+                    <option value="12-25">₹12 lakhs - ₹25 lakhs</option>
+                    <option value=">25">More than ₹25 lakhs</option>
+                  </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Submit Application</button>
+                <div id="successSalaried" class="success-message hide">
+                  ✓ Application submitted! We'll contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan 2: Freelancer -->
+        <div class="plan-card" id="plan2">
+          <div class="plan-header" onclick="togglePlan('plan2')">
+            <div class="plan-header-left">
+              <div class="plan-icon">💼</div>
+              <div class="plan-info">
+                <h3>Total Income >25 lakhs and </h3>
+                <p>For individuals with salary income, house property, other income</p>
+              </div>
+            </div>
+            <div class="plan-price">₹1,699</div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- Freelancer Form -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="freelancerForm" onsubmit="submitForm(event, 'freelancer')">
+                <div class="form-group">
+                  <label>1. Full Name *</label>
+                  <input type="text" id="freelancerName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="freelancerEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="freelancerPhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Income Range *</label>
+                  <select id="freelancerIncome" required>
+                    <option value="">Select your income range</option>
+                    <option value="<12">Less than ₹12 lakhs</option>
+                    <option value="12-25">₹12 lakhs - ₹25 lakhs</option>
+                    <option value=">25">More than ₹25 lakhs</option>
+                  </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Submit Application</button>
+                <div id="successFreelancer" class="success-message hide">
+                  ✓ Application submitted! We'll contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan 3: Capital Gains -->
+        <div class="plan-card" id="plan3">
+          <div class="plan-header" onclick="togglePlan('plan3')">
+            <div class="plan-header-left">
+              <div class="plan-icon">📈</div>
+              <div class="plan-info">
+                <h3>Total income upto 25 lakh (includes Capital Gain)</h3>
+                <p>For individuals with capital gain & salary income, house property, other income</p>
+              </div>
+            </div>
+            <div class="plan-price">Fees at 0.07% of total income</div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- Capital Gains Form -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="capitalGainsForm" onsubmit="submitForm(event, 'capitalgains')">
+                <div class="form-group">
+                  <label>1. Full Name *</label>
+                  <input type="text" id="cgName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="cgEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="cgPhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Income Range *</label>
+                  <select id="cgIncome" required>
+                    <option value="">Select your income range</option>
+                    <option value="<12">Less than ₹12 lakhs</option>
+                    <option value="12-25">₹12 lakhs - ₹25 lakhs</option>
+                    <option value=">25">More than ₹25 lakhs</option>
+                  </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Submit Application</button>
+                <div id="successCapitalGains" class="success-message hide">
+                  ✓ Application submitted! We'll contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEW PLAN 4: HUF / Trust -->
+        <div class="plan-card" id="plan4">
+          <div class="plan-header" onclick="togglePlan('plan4')">
+            <div class="plan-header-left">
+              <div class="plan-icon">🏛️</div>
+              <div class="plan-info">
+                <h3>Total income >25 lakh (includes Capital Gain)</h3>
+                <p>For individuals with capital gain & salary income, house property, other income</p>
+              </div>
+            </div>
+            <div class="plan-price">₹2,199</div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- HUF Form -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="hufForm" onsubmit="submitForm(event, 'huf')">
+                <div class="form-group">
+                  <label>1. Entity Name *</label>
+                  <input type="text" id="hufName" placeholder="Enter HUF/Trust name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="hufEmail" placeholder="contact@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="hufPhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Annual Income Range *</label>
+                  <select id="hufIncome" required>
+                    <option value="">Select income range</option>
+                    <option value="<12">Less than ₹12 lakhs</option>
+                    <option value="12-25">₹12 lakhs - ₹25 lakhs</option>
+                    <option value=">25">More than ₹25 lakhs</option>
+                  </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Submit Application</button>
+                <div id="successHuf" class="success-message hide">
+                  ✓ Application submitted! We'll contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEW PLAN 5: NRI / Foreign Income -->
+        <div class="plan-card" id="plan5">
+          <div class="plan-header" onclick="togglePlan('plan5')">
+            <div class="plan-header-left">
+              <div class="plan-icon">🌐</div>
+              <div class="plan-info">
+                <h3>any other ITR return  </h3>
+                <p>Any bussines , presumptive and professional</p>
+              </div>
+            </div>
+            <div class="plan-price">₹2,499</div>
+            <div class="dropdown-icon">▼</div>
+          </div>
+          
+          <!-- NRI Form -->
+          <div class="plan-form">
+            <div class="simple-form">
+              <form id="nriForm" onsubmit="submitForm(event, 'nri')">
+                <div class="form-group">
+                  <label>1. Full Name *</label>
+                  <input type="text" id="nriName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>2. Email Address *</label>
+                  <input type="email" id="nriEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>3. Phone Number *</label>
+                  <input type="tel" id="nriPhone" placeholder="98765 43210" required>
+                </div>
+                
+                <div class="form-group">
+                  <label>4. Global Income Range *</label>
+                  <select id="nriIncome" required>
+                    <option value="">Select income range</option>
+                    <option value="<12">Less than ₹12 lakhs</option>
+                    <option value="12-25">₹12 lakhs - ₹25 lakhs</option>
+                    <option value=">25">More than ₹25 lakhs</option>
+                  </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Submit Application</button>
+                <div id="successNri" class="success-message hide">
+                  ✓ Application submitted! We'll contact you within 4 hours.
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      © 2025 SmartTax. All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    // Toggle dropdown function
+    function togglePlan(planId) {
+      const planCard = document.getElementById(planId);
+      
+      // Check if this card is already active
+      const isActive = planCard.classList.contains('active');
+      
+      // First, remove active class from all cards
+      const allPlans = document.querySelectorAll('.plan-card');
+      allPlans.forEach(plan => {
+        plan.classList.remove('active');
+      });
+      
+      // If it wasn't active, make it active
+      if (!isActive) {
+        planCard.classList.add('active');
+      }
+    }
+
+    // Form submission function
+    function submitForm(event, planType) {
+      event.preventDefault();
+      
+      // Get form data based on plan type
+      let formData = {};
+      
+      if (planType === 'salaried') {
+        formData = {
+          name: document.getElementById('salariedName').value,
+          email: document.getElementById('salariedEmail').value,
+          phone: document.getElementById('salariedPhone').value,
+          income: document.getElementById('salariedIncome').value,
+          plan: 'Salaried ITR-1'
+        };
+        document.getElementById('successSalaried').classList.remove('hide');
+        
+      } else if (planType === 'freelancer') {
+        formData = {
+          name: document.getElementById('freelancerName').value,
+          email: document.getElementById('freelancerEmail').value,
+          phone: document.getElementById('freelancerPhone').value,
+          income: document.getElementById('freelancerIncome').value,
+          plan: 'Freelancer ITR-3'
+        };
+        document.getElementById('successFreelancer').classList.remove('hide');
+        
+      } else if (planType === 'capitalgains') {
+        formData = {
+          name: document.getElementById('cgName').value,
+          email: document.getElementById('cgEmail').value,
+          phone: document.getElementById('cgPhone').value,
+          income: document.getElementById('cgIncome').value,
+          plan: 'Capital Gains ITR-2'
+        };
+        document.getElementById('successCapitalGains').classList.remove('hide');
+        
+      } else if (planType === 'huf') {
+        formData = {
+          name: document.getElementById('hufName').value,
+          email: document.getElementById('hufEmail').value,
+          phone: document.getElementById('hufPhone').value,
+          income: document.getElementById('hufIncome').value,
+          plan: 'HUF / Trust'
+        };
+        document.getElementById('successHuf').classList.remove('hide');
+        
+      } else if (planType === 'nri') {
+        formData = {
+          name: document.getElementById('nriName').value,
+          email: document.getElementById('nriEmail').value,
+          phone: document.getElementById('nriPhone').value,
+          income: document.getElementById('nriIncome').value,
+          plan: 'NRI / Foreign Income'
+        };
+        document.getElementById('successNri').classList.remove('hide');
+      }
+      
+      // Add timestamp
+      formData.timestamp = new Date().toLocaleString();
+      
+      console.log('Application submitted:', formData);
+      
+      // Hide success message after 3 seconds and reset form
+      setTimeout(() => {
+        if (planType === 'salaried') {
+          document.getElementById('successSalaried').classList.add('hide');
+          document.getElementById('salariedForm').reset();
+        } else if (planType === 'freelancer') {
+          document.getElementById('successFreelancer').classList.add('hide');
+          document.getElementById('freelancerForm').reset();
+        } else if (planType === 'capitalgains') {
+          document.getElementById('successCapitalGains').classList.add('hide');
+          document.getElementById('capitalGainsForm').reset();
+        } else if (planType === 'huf') {
+          document.getElementById('successHuf').classList.add('hide');
+          document.getElementById('hufForm').reset();
+        } else if (planType === 'nri') {
+          document.getElementById('successNri').classList.add('hide');
+          document.getElementById('nriForm').reset();
+        }
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
